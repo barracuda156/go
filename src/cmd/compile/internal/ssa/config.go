@@ -39,6 +39,7 @@ type Config struct {
 	nacl            bool          // GOOS=nacl
 	use387          bool          // GO386=387
 	SoftFloat       bool          //
+	OldArch         bool          // True for older versions of architecture, e.g. true for PPC64BE, false for PPC64LE
 	NeedsFpScratch  bool          // No direct move between GP and FP register sets
 	BigEndian       bool          //
 	sparsePhiCutoff uint64        // Sparse phi location algorithm used above this #blocks*#variables score
@@ -254,6 +255,7 @@ func NewConfig(arch string, types Types, ctxt *obj.Link, optimize bool) *Config 
 		c.hasGReg = true
 		c.noDuffDevice = objabi.GOOS == "darwin" // darwin linker cannot handle BR26 reloc with non-zero addend
 	case "ppc64":
+		c.OldArch = true
 		c.BigEndian = true
 		fallthrough
 	case "ppc64le":
